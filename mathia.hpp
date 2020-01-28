@@ -4,15 +4,16 @@
 
 const char numLowerBound = '0'; //Value of the lower bound and upper bound values of numerals respectively ('0' and '9')
 const char numUpperBound = '9';
-const bool enableDebugInfo = false; //Whether to display debug information after every command.
+bool enableDebugInfo = false; //Whether to display debug information after every command.
 const int maxPriority = 2; //Specifies the maximum priority of the objects.
 //char numerals[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
 char operators[] = {'+', '-', '*', '/', '%', '^'};
+bool session = true;
 
 void info() //Displays information message.
 {
-    std::cout << "Mathia Alpha v0.2 by zhang0313" << std::endl;
-    std::cout << "Basic arithmetic functions are now available, though they are still a bit buggy." << std::endl;
+    std::cout << "Mathia Alpha v0.3 by zhang0313" << std::endl;
+    std::cout << "Added basic functions, info, logout, and etc." << std::endl;
 }
 
 class Object
@@ -20,8 +21,9 @@ class Object
     private:
         std::string content; //Content of the object, as string.
         std::string type; //Possible types: null, number, operator, function (to be implemented)
-        double value; //The numerical value of the NUMBER.
-        int priority; //Priority of the operator.
+        double value;
+        int priority;
+        Polynomial poly; //Polynomial value of the object.
     public:
         Object()
         {
@@ -122,12 +124,61 @@ class Object
 void addObject(std::string, std::string); //Adds the object into the list of objects.
 void debug(); //Displays debug information.
 int searchNum(int, std::string); //Searches the end of a value. begin: the beginning index to search from. str: the string to search from.
+void compute(std::string);
+void logout();
+void toggleDebug(std::string);
 
 std::vector<Object> objects; //Lists all the objects in the command line.
 int ptr; //An index used to divide the command into values.
 
 void loadCommand(std::string command)
 {
+    int i = command.find_first_of(' ', 0);
+    std::string cmd;
+    std::string para;
+    if(i != std::string::npos)
+    {
+        cmd = command.substr(0, i);
+        para = command.substr(i + 1);
+    }
+    else
+    {
+        cmd = command;
+        para = "";
+    }
+    if(cmd == "compute" || cmd == "calc")
+    {
+        compute(para);
+    }
+    else if(cmd == "exit" || cmd == "logout" || cmd == "quit")
+    {
+        logout();
+    }
+    else if(cmd == "info")
+    {
+        info();
+    }
+    else if(cmd == "debug")
+    {
+        toggleDebug(para);
+    }
+    else
+    {
+        std::cout << "Mathia: command \"" << cmd << "\" not found." << std::endl;
+    }
+    if(enableDebugInfo)
+    {
+        std::cout << cmd << std::endl;
+        std::cout << para << std::endl;
+    }
+}
+
+void compute(std::string command)
+{
+    if(command.size() <= 1)
+    {
+        return;
+    }
     int i, j;
     for(i = 0; i < command.size(); i++)
     {
@@ -186,6 +237,12 @@ void loadCommand(std::string command)
     objects.clear();
 }
 
+void logout()
+{
+    std::cout << "\n[Session Complete]\n" << std::endl;
+    session = false;
+}
+
 int searchNum(int begin, std::string str) //A function to search for the end of the value, and returns the index.
 {
     int i, j;
@@ -223,4 +280,23 @@ void debug() //Displays debug information.
         std::cout << objects[i].getContent() << std::endl;
         std::cout << objects[i].getType() << std::endl;
     }
+}
+
+void toggleDebug(std::string para)
+{
+    if(para == "true" || para == "TRUE" || para == "1")
+    {
+        enableDebugInfo = true;
+        std::cout << "Debug information enabled" << std::endl;
+    }
+    else if(para == "false" || para == "FALSE" || para == "0")
+    {
+        enableDebugInfo = false;
+        std::cout << "Debug information disabled" << std::endl;
+    }
+    else
+    {
+        std::cout << "debug: invalid parameters (true/false accepted)" << std::endl;
+    }
+
 }

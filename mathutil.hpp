@@ -520,3 +520,5 @@ Polynomial inputPolynomial(std::string name) //A user-friendly function to creat
     Polynomial P = polyParseVector(vec);
     return P;
 }
+
+class Matrix;

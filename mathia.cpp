@@ -6,8 +6,9 @@ char c;
 
 int main()
 {
+    session = true;
     info();
-    while(true)
+    while(session)
     {
         std::cout << "Mathia > ";
         std::getline(std::cin, input);
