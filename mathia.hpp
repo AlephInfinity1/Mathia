@@ -4,7 +4,7 @@
 
 const char numLowerBound = '0'; //Value of the lower bound and upper bound values of numerals respectively ('0' and '9')
 const char numUpperBound = '9';
-const bool enableDebugInfo = true; //Whether to display debug information after every command.
+const bool enableDebugInfo = false; //Whether to display debug information after every command.
 const int maxPriority = 2; //Specifies the maximum priority of the objects.
 char numerals[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
 char operators[] = {'+', '-', '*', '/', '%', '^'};
@@ -150,6 +150,39 @@ void loadCommand(std::string command)
     {
         debug();
     }
+    for(i = maxPriority; i > 0; i--)
+    {
+        for(j = 0; j < objects.size(); j++)
+        {
+            Object* objPtr = &objects[j];
+            if(objects[j].getType() == "operator" && objects[j].getPriority() == i)
+            {
+                double val1 = (objPtr - 1) -> getNumericValue();
+                double val2 = (objPtr + 1) -> getNumericValue();
+                switch(objects[j].getContent()[0])
+                {
+                    case '+':
+                        addObject(std::to_string(val1 + val2), "number");
+                        break;
+                    case '-':
+                        addObject(std::to_string(val1 - val2), "number");
+                        break;
+                    case '*':
+                        addObject(std::to_string(val1 * val2), "number");
+                        break;
+                    case '/':
+                        addObject(std::to_string(val1 / val2), "number");
+                        break;
+                    case '^':
+                        addObject(std::to_string(pow(val1, val2)), "number");
+                        break;
+                }
+                objects.erase(objects.begin() + j - 1, objects.begin() + j + 2);
+                j = 0;
+            }
+        }
+    }
+    std::cout << " > " << objects[0].getContent() << std::endl;
     objects.clear();
 }
 
