@@ -1,4 +1,4 @@
-# Mathia v0.2
+# Mathia Alpha v0.0.5
 
 A command-line–like tool for mathematical operations.
 
@@ -10,6 +10,7 @@ A command-line–like tool for mathematical operations.
 - [ ] Create a function to parse string into Polynomial.
 - [ ] Modify polyDivide so that it displays the procedure line-by-line.
 - [ ] Fix the issue with arithmetic operations (9+2-9 returning - as the result.)
+- [ ] Commands def and rcl are functional now, but variables still cannot be used in calc.
 
 ## Future ideas
 
