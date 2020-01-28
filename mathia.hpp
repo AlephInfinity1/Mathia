@@ -13,8 +13,8 @@ bool calclock = false;
 
 void info() //Displays information message.
 {
-    std::cout << "Mathia Alpha v0.0.3 by zhang0313" << std::endl;
-    std::cout << "Added basic functions, info, logout, and etc." << std::endl;
+    std::cout << "Mathia Alpha v0.0.5 by zhang0313" << std::endl;
+    std::cout << "Added help, forcedef, and rcl." << std::endl;
 }
 
 class Object
@@ -168,7 +168,9 @@ void compute(std::string); //Computes the equation
 void logout(); //exits the program
 void toggleDebug(std::string); //Toggles whether to display debug information
 void toggleCalclock(); //Toggles calc lock (while under calc lock, the command is calc by default.)
-void define(std::string); //Defines a new variable.
+void define(std::string, bool); //Defines a new variable.
+void recall(std::string); //Recalls a variable by name.
+void help(std::string); //Displays the information specified by the string.
 
 std::vector<Object> objects; //Lists all the objects in the command line.
 std::vector<Variable> vars; //Lists all the variable defined so far in the program.
@@ -210,6 +212,10 @@ void loadCommand(std::string command)
     {
         compute(para);
     }
+    else if(cmd == "help")
+    {
+        help(para);
+    }
     else if(cmd == "exit" || cmd == "logout" || cmd == "quit")
     {
         logout();
@@ -228,7 +234,15 @@ void loadCommand(std::string command)
     }
     else if(cmd == "def")
     {
-        define(para);
+        define(para, false);
+    }
+    else if(cmd == "rcl" || cmd == "recall")
+    {
+        recall(para);
+    }
+    else if(cmd == "forcedef" || cmd == "fdef")
+    {
+        define(para, true);
     }
     else
     {
@@ -384,7 +398,7 @@ void toggleCalclock()
     }
 }
 
-void define(std::string para)
+void define(std::string para, bool force)
 {
     int i = para.find_first_of(' ', 0);
     std::string type;
@@ -394,13 +408,92 @@ void define(std::string para)
         type = para.substr(0, i);
         name = para.substr(i + 1);
     }
-
+    if(force == false) //If force def is not enabled, check if a variable by the same name already exists.
+    {
+        for(Variable x : vars)
+        {
+            if(x.getName() == para)
+            {
+                std::cout << "def: a variable by the name \"" << para << "\" already exists. Use forcedef if you want to redefine it." << std::endl;
+                return;
+            }
+        }
+    }
     if(type == "polynomial")
     {
         Polynomial P = inputPolynomial(name);
         Variable newVar (name, type, P);
         vars.push_back(newVar);
     }
+    else
+    {
+        std::cout << "def: \"" << type << "\" is not a valid variable type." << std::endl;
+        return;
+    }
 
     std::cout << "Successfully created new " << type << " " << name << "." << std::endl;
+}
+
+void recall(std::string var)
+{
+    for(Variable x : vars)
+    {
+        if(x.getName() == var)
+        {
+            if(x.getType() == "polynomial")
+            {
+                std::cout << " > " << x.getValue().toString() << std::endl;
+                return;
+            }
+        }
+    }
+    //If no variables match the name.
+    std::cout << "recall: variable \"" << var << "\" does not exist. Use def to create one." << std::endl;
+}
+
+void help(std::string cmd)
+{
+    if(cmd == "compute" || cmd == "calc")
+    {
+        std::cout << "calc <expression>: returns the calculated value of the expression." << std::endl;
+    }
+    else if(cmd == "help")
+    {
+        std::cout << "help <cmd>: displays this help page. <cmd>: the command whose information is to be displayed." << std::endl;
+    }
+    else if(cmd == "exit" || cmd == "logout" || cmd == "quit")
+    {
+        std::cout << "logout: exits the session." << std::endl;
+    }
+    else if(cmd == "info")
+    {
+        std::cout << "info: shows the information of the newest update." << std::endl;
+        std::cout << "For more detailed changelog, go to https://github.com/zhang0313/Mathia." << std::endl;
+    }
+    else if(cmd == "debug")
+    {
+        std::cout << "debug <option>: toggles debug information. <option>: true or false." << std::endl;
+    }
+    else if(cmd == "calclock")
+    {
+        std::cout << "calclock: toggles calc lock. While under calc lock, everything is run through calc." << std::endl;
+    }
+    else if(cmd == "def")
+    {
+        std::cout << "def <type> <name>: defines a variable of type <type> by the name <name>." << std::endl;
+    }
+    else if(cmd == "rcl" || cmd == "recall")
+    {
+        std::cout << "recall <name>: displays the value of the variable <name>." << std::endl;
+    }
+    else if(cmd == "forcedef" || cmd == "fdef")
+    {
+        std::cout << "forcedef <type> <name>: defines a variable of type <type> by the name <name>. Overwrites any previous data." << std::endl;
+    }
+    else
+    {
+        std::cout << "Use help <cmd> for more specific explanation of commands." << std::endl;
+        std::cout << "A list of commands" << std::endl;
+        std::cout << "calc\nhelp\nlogout\ninfo\ndebug\ncalclock\ndef\nrcl\nforcedef" << std::endl;
+    }
 }
