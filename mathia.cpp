@@ -6,11 +6,21 @@ char c;
 
 int main()
 {
+    vars.clear();
     session = true;
     info();
     while(session)
     {
-        std::cout << "Mathia > ";
+        std::cout << "Mathia ";
+        if(enableDebugInfo)
+        {
+            std::cout << "(Debug Info Enabled) ";
+        }
+        if(calclock)
+        {
+            std::cout << "(Calc Lock Enabled) ";
+        }
+        std::cout << "> ";
         std::getline(std::cin, input);
         loadCommand(input);
     }

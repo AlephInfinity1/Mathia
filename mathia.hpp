@@ -9,10 +9,11 @@ const int maxPriority = 2; //Specifies the maximum priority of the objects.
 //char numerals[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
 char operators[] = {'+', '-', '*', '/', '%', '^'};
 bool session = true;
+bool calclock = false;
 
 void info() //Displays information message.
 {
-    std::cout << "Mathia Alpha v0.3 by zhang0313" << std::endl;
+    std::cout << "Mathia Alpha v0.0.3 by zhang0313" << std::endl;
     std::cout << "Added basic functions, info, logout, and etc." << std::endl;
 }
 
@@ -121,18 +122,77 @@ class Object
         }
 };
 
+class Variable
+{
+    private:
+        std::string name; //Name of the variable, refered to in def.
+        std::string type; //Type of the variable. Currently only "polynomial" is allowed
+        Polynomial value; //The polynomial value of the variable.
+    public:
+        Variable(std::string n, std::string t, Polynomial v)
+        {
+            name = n;
+            type = t;
+            value = v;
+        }
+        std::string getName() //Getter functions
+        {
+            return name;
+        }
+        std::string getType()
+        {
+            return type;
+        }
+        Polynomial getValue()
+        {
+            return value;
+        }
+        void setName(std::string newName) //Setter functions
+        {
+            name = newName;
+        }
+        void setType(std::string newType)
+        {
+            type = newType;
+        }
+        void setValue(Polynomial newValue)
+        {
+            value = newValue;
+        }
+};
+
 void addObject(std::string, std::string); //Adds the object into the list of objects.
 void debug(); //Displays debug information.
 int searchNum(int, std::string); //Searches the end of a value. begin: the beginning index to search from. str: the string to search from.
-void compute(std::string);
-void logout();
-void toggleDebug(std::string);
+void compute(std::string); //Computes the equation
+void logout(); //exits the program
+void toggleDebug(std::string); //Toggles whether to display debug information
+void toggleCalclock(); //Toggles calc lock (while under calc lock, the command is calc by default.)
+void define(std::string); //Defines a new variable.
 
 std::vector<Object> objects; //Lists all the objects in the command line.
+std::vector<Variable> vars; //Lists all the variable defined so far in the program.
 int ptr; //An index used to divide the command into values.
 
 void loadCommand(std::string command)
 {
+    if(calclock)
+    {
+        if(command.find("calclock") == 0)
+        {
+            toggleCalclock();
+        }
+        else if(command.find("logout") == 0 || command.find("exit") == 0 || command.find("quit") == 0)
+        {
+            logout();
+        }
+        else
+        {
+            compute(command);
+        }
+
+    }
+
     int i = command.find_first_of(' ', 0);
     std::string cmd;
     std::string para;
@@ -161,6 +221,14 @@ void loadCommand(std::string command)
     else if(cmd == "debug")
     {
         toggleDebug(para);
+    }
+    else if(cmd == "calclock")
+    {
+        toggleCalclock();
+    }
+    else if(cmd == "def")
+    {
+        define(para);
     }
     else
     {
@@ -299,4 +367,40 @@ void toggleDebug(std::string para)
         std::cout << "debug: invalid parameters (true/false accepted)" << std::endl;
     }
 
+}
+
+void toggleCalclock()
+{
+    if(calclock)
+    {
+        calclock = false;
+        std::cout << "Calc Lock disabled" << std::endl;
+        return;
+    }
+    else
+    {
+        calclock = true;
+        std::cout << "Calc Lock enabled" << std::endl;
+    }
+}
+
+void define(std::string para)
+{
+    int i = para.find_first_of(' ', 0);
+    std::string type;
+    std::string name;
+    if(i != std::string::npos)
+    {
+        type = para.substr(0, i);
+        name = para.substr(i + 1);
+    }
+
+    if(type == "polynomial")
+    {
+        Polynomial P = inputPolynomial(name);
+        Variable newVar (name, type, P);
+        vars.push_back(newVar);
+    }
+
+    std::cout << "Successfully created new " << type << " " << name << "." << std::endl;
 }
