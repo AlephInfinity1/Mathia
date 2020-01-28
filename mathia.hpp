@@ -6,13 +6,13 @@ const char numLowerBound = '0'; //Value of the lower bound and upper bound value
 const char numUpperBound = '9';
 const bool enableDebugInfo = false; //Whether to display debug information after every command.
 const int maxPriority = 2; //Specifies the maximum priority of the objects.
-char numerals[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
+//char numerals[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
 char operators[] = {'+', '-', '*', '/', '%', '^'};
 
 void info() //Displays information message.
 {
-    std::cout << "Mathia Alpha v0.1 by zhang0313" << std::endl;
-    std::cout << "Nothing is functional rn, new features coming soon." << std::endl;
+    std::cout << "Mathia Alpha v0.2 by zhang0313" << std::endl;
+    std::cout << "Basic arithmetic functions are now available, though they are still a bit buggy." << std::endl;
 }
 
 class Object
@@ -192,12 +192,9 @@ int searchNum(int begin, std::string str) //A function to search for the end of 
     bool decimalPlace = false;
     for(i = begin; i < str.size(); i++)
     {
-        for(j = 0; j < 10; j++)
+        if(str[i] >= numLowerBound && str[i] <= numUpperBound)
         {
-            if(str[i] == numerals[j])
-            {
-                goto CHECK;
-            }
+            goto CHECK;
         }
         if(str[i] == '.' && !decimalPlace)
         {
