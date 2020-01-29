@@ -14,11 +14,11 @@ int main()
         std::cout << "Mathia ";
         if(enableDebugInfo)
         {
-            std::cout << "(Debug Info Enabled) ";
+            std::cout << "(Debug) ";
         }
         if(calclock)
         {
-            std::cout << "(Calc Lock Enabled) ";
+            std::cout << "(Calc Lock) ";
         }
         std::cout << "> ";
         std::getline(std::cin, input);
