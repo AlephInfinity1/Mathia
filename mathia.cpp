@@ -24,4 +24,5 @@ int main()
         std::getline(std::cin, input);
         loadCommand(input);
     }
+    return 0;
 }

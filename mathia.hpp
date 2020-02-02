@@ -5,16 +5,17 @@
 const char numLowerBound = '0'; //Value of the lower bound and upper bound values of numerals respectively ('0' and '9')
 const char numUpperBound = '9';
 bool enableDebugInfo = false; //Whether to display debug information after every command.
-const int maxPriority = 2; //Specifies the maximum priority of the objects.
+const int maxPriority = 3; //Specifies the maximum priority of the objects.
 //char numerals[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
 char operators[] = {'+', '-', '*', '/', '%', '^'};
-bool session = true;
+bool session = true; //Determines if the session has ended or not.
 bool calclock = false;
 
 void info() //Displays information message.
 {
     std::cout << "Mathia Alpha v0.0.5 by zhang0313" << std::endl;
     std::cout << "Added help, forcedef, and rcl." << std::endl;
+    std::cout << "For a more detailed explanation, use help." << std::endl;
 }
 
 class Object;
@@ -160,7 +161,7 @@ class Object
                 {
                     if(objects[i].getType() == "openingBracket" || objects[i].getContent() == "(")
                     {
-                        bracketLvl = bracketLvl + 1;
+                        this -> setBracketLvl(bracketLvl + 1);
                         if(enableDebugInfo)
                         {
                             std::cout << "Object: " << this -> getContent() << std::endl;
@@ -171,7 +172,7 @@ class Object
                     }
                     if(objects[i].getType() == "closingBracket" || objects[i].getContent() == ")")
                     {
-                        bracketLvl = bracketLvl - 1;
+                        this -> setBracketLvl(bracketLvl - 1);
                         if(enableDebugInfo)
                         {
                             std::cout << "Object: " << this -> getContent() << std::endl;
@@ -243,7 +244,7 @@ void loadCommand(std::string command)
 {
     if(calclock)
     {
-        if(command.find("calclock") == 0)
+        if(command.find("calclock") == 0 || command.find("cl") == 0)
         {
             toggleCalclock();
         }
@@ -291,7 +292,7 @@ void loadCommand(std::string command)
     {
         toggleDebug(para);
     }
-    else if(cmd == "calclock")
+    else if(cmd == "calclock" || cmd == "cl")
     {
         toggleCalclock();
     }
@@ -580,7 +581,7 @@ void help(std::string cmd)
     {
         std::cout << "debug <option>: toggles debug information. <option>: true or false." << std::endl;
     }
-    else if(cmd == "calclock")
+    else if(cmd == "calclock" || cmd == "cl")
     {
         std::cout << "calclock: toggles calc lock. While under calc lock, everything is run through calc." << std::endl;
     }
