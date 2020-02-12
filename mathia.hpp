@@ -2,10 +2,10 @@
 #include <cstdio>
 #include "mathutil.hpp"
 
-const char numLowerBound = '0'; //Value of the lower bound and upper bound values of numerals respectively ('0' and '9')
-const char numUpperBound = '9';
-bool enableDebugInfo = false; //Whether to display debug information after every command.
-const int maxPriority = 3; //Specifies the maximum priority of the objects.
+const char num_lower_bound = '0'; //Value of the lower bound and upper bound values of numerals respectively ('0' and '9')
+const char num_upper_bound = '9';
+bool enable_debug_info = false; //Whether to display debug information after every command.
+const int max_priority = 3; //Specifies the maximum priority of the objects.
 //char numerals[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
 char operators[] = {'+', '-', '*', '/', '%', '^'};
 bool session = true; //Determines if the session has ended or not.
@@ -32,7 +32,7 @@ class Object
         double value;
         int priority;
         Polynomial poly; //Polynomial value of the object.
-        int bracketLvl; //The number of nested brackets of the operator.
+        int bracket_lvl; //The number of nested brackets of the operator.
         int loc; //Index in the objects vector.
     public:
         Object()
@@ -75,51 +75,51 @@ class Object
             type = t;
             loc = l;
         }
-        std::string getContent()
+        std::string get_content()
         {
             return content;
         }
-        std::string getType()
+        std::string get_type()
         {
             return type;
         }
-        double getNumericValue()
+        double get_numeric_value()
         {
             return value;
         }
-        int getPriority()
+        int get_priority()
         {
             return priority;
         }
-        int getBracketLvl()
+        int get_bracket_lvl()
         {
-            return bracketLvl;
+            return bracket_lvl;
         }
-        int getLoc()
+        int get_loc()
         {
             return loc;
         }
-        void setContent(std::string newContent)
+        void set_content(std::string newContent)
         {
             content = newContent;
         }
-        void setType(std::string newType)
+        void set_type(std::string newType)
         {
             type = newType;
         }
-        void setNumericValue(double newValue)
+        void set_numeric_value(double newValue)
         {
             value = newValue;
         }
-        void setPriority(int newPriority)
+        void set_priority(int newPriority)
         {
             priority = newPriority;
         }
-        void setBracketLvl(int newLvl)
+        void set_bracket_lvl(int newLvl)
         {
-            bracketLvl = newLvl;
+            bracket_lvl = newLvl;
         }
-        void setLoc(int newLoc)
+        void set_loc(int newLoc)
         {
             loc = newLoc;
         }
@@ -156,29 +156,29 @@ class Object
                         priority = -1; //Invalid operator, will not be computed.
                         break;
                 }
-                bracketLvl = 0;
+                bracket_lvl = 0;
                 for(int i = loc; i >= 0; i--)
                 {
-                    if(objects[i].getType() == "openingBracket" || objects[i].getContent() == "(")
+                    if(objects[i].get_type() == "opening_bracket" || objects[i].get_content() == "(")
                     {
-                        this -> setBracketLvl(bracketLvl + 1);
-                        if(enableDebugInfo)
+                        this -> set_bracket_lvl(bracket_lvl + 1);
+                        if(enable_debug_info)
                         {
-                            std::cout << "Object: " << this -> getContent() << std::endl;
+                            std::cout << "Object: " << this -> get_content() << std::endl;
                             std::cout << "Update: found opening bracket." << std::endl;
-                            std::cout << "bracketLvl is now " << bracketLvl << std::endl;
-                            std::cout << "getBracketLvl returns " << this -> getBracketLvl() << std::endl;
+                            std::cout << "bracket_lvl is now " << bracket_lvl << std::endl;
+                            std::cout << "get_bracket_lvl returns " << this -> get_bracket_lvl() << std::endl;
                         }
                     }
-                    if(objects[i].getType() == "closingBracket" || objects[i].getContent() == ")")
+                    if(objects[i].get_type() == "closing_bracket" || objects[i].get_content() == ")")
                     {
-                        this -> setBracketLvl(bracketLvl - 1);
-                        if(enableDebugInfo)
+                        this -> set_bracket_lvl(bracket_lvl - 1);
+                        if(enable_debug_info)
                         {
-                            std::cout << "Object: " << this -> getContent() << std::endl;
+                            std::cout << "Object: " << this -> get_content() << std::endl;
                             std::cout << "Update: found closing bracket." << std::endl;
-                            std::cout << "bracketLvl is now " << bracketLvl << std::endl;
-                            std::cout << "getBracketLvl returns " << this -> getBracketLvl() << std::endl;
+                            std::cout << "bracket_lvl is now " << bracket_lvl << std::endl;
+                            std::cout << "get_bracket_lvl returns " << this -> get_bracket_lvl() << std::endl;
                         }
                     }
                 }
@@ -199,54 +199,54 @@ class Variable
             type = t;
             value = v;
         }
-        std::string getName() //Getter functions
+        std::string get_name() //Getter functions
         {
             return name;
         }
-        std::string getType()
+        std::string get_type()
         {
             return type;
         }
-        Polynomial getValue()
+        Polynomial get_value()
         {
             return value;
         }
-        void setName(std::string newName) //Setter functions
+        void set_name(std::string newName) //Setter functions
         {
             name = newName;
         }
-        void setType(std::string newType)
+        void set_type(std::string newType)
         {
             type = newType;
         }
-        void setValue(Polynomial newValue)
+        void set_value(Polynomial newValue)
         {
             value = newValue;
         }
 };
 
-void addObject(std::string, std::string, int); //Adds the object into the list of objects.
+void add_object(std::string, std::string, int); //Adds the object into the list of objects.
 void debug(int); //Displays debug information.
-int searchNum(int, std::string); //Searches the end of a value. begin: the beginning index to search from. str: the string to search from.
+int search_num(int, std::string); //Searches the end of a value. begin: the beginning index to search from. str: the string to search from.
 void compute(std::string); //Computes the equation
 void logout(); //exits the program
-void toggleDebug(std::string); //Toggles whether to display debug information
-void toggleCalclock(); //Toggles calc lock (while under calc lock, the command is calc by default.)
+void toggle_debug(std::string); //Toggles whether to display debug information
+void toggle_calclock(); //Toggles calc lock (while under calc lock, the command is calc by default.)
 void define(std::string, bool); //Defines a new variable.
 void recall(std::string); //Recalls a variable by name.
 void help(std::string); //Displays the information specified by the string.
-int getLeftNum(int); //Gets the nearest number to the left of the index provided.
-int getRightNum(int);
+int get_left_num(int); //Gets the nearest number to the left of the index provided.
+int get_right_num(int);
 
 int ptr; //An index used to divide the command into values.
 
-void loadCommand(std::string command)
+void load_command(std::string command)
 {
     if(calclock)
     {
         if(command.find("calclock") == 0 || command.find("cl") == 0)
         {
-            toggleCalclock();
+            toggle_calclock();
         }
         else if(command.find("logout") == 0 || command.find("exit") == 0 || command.find("quit") == 0)
         {
@@ -290,11 +290,11 @@ void loadCommand(std::string command)
     }
     else if(cmd == "debug")
     {
-        toggleDebug(para);
+        toggle_debug(para);
     }
     else if(cmd == "calclock" || cmd == "cl")
     {
-        toggleCalclock();
+        toggle_calclock();
     }
     else if(cmd == "def")
     {
@@ -312,7 +312,7 @@ void loadCommand(std::string command)
     {
         std::cout << "Mathia: command \"" << cmd << "\" not found." << std::endl;
     }
-    if(enableDebugInfo)
+    if(enable_debug_info)
     {
         std::cout << cmd << std::endl;
         std::cout << para << std::endl;
@@ -328,73 +328,73 @@ void compute(std::string command)
     int i, j, k, l = 0;
     for(i = 0; i < command.size(); i++)
     {
-        if(command[i] >= numLowerBound && command[i] <= numUpperBound)
+        if(command[i] >= num_lower_bound && command[i] <= num_upper_bound)
         {
-            ptr = searchNum(i, command);
-            addObject(command.substr(i, ptr - i), "number", -1);
+            ptr = search_num(i, command);
+            add_object(command.substr(i, ptr - i), "number", -1);
             i = ptr;
         }
         for(j = 0; j < 6; j++)
         {
             if(command[i] == operators[j])
             {
-                addObject(command.substr(i, 1), "operator", -1);
+                add_object(command.substr(i, 1), "operator", -1);
                 break;
             }
         }
         if(command[i] == '(')
         {
-            addObject(command.substr(i, 1), "openingBracket", -1);
+            add_object(command.substr(i, 1), "opening_bracket", -1);
         }
         if(command[i] == ')')
         {
-            addObject(command.substr(i, 1), "closingBracket", -1);
+            add_object(command.substr(i, 1), "closing_bracket", -1);
         }
     }
     for(Object x : objects)
     {
         x.update();
     }
-    if(enableDebugInfo)
+    if(enable_debug_info)
     {
         debug(0);
     }
     for(k = 5; k >= 0; k--)
     {
-        for(i = maxPriority; i > 0; i--) //Processes operators in descending priority.
+        for(i = max_priority; i > 0; i--) //Processes operators in descending priority.
         {
             for(j = 0; j < objects.size(); j++)
             {
-                if(objects[j].getType() == "operator" && objects[j].getPriority() == i && objects[j].getBracketLvl() == k)
+                if(objects[j].get_type() == "operator" && objects[j].get_priority() == i && objects[j].get_bracket_lvl() == k)
                 {
-                    double val1 = objects[getLeftNum(j)].getNumericValue();
-                    double val2 = objects[getRightNum(j)].getNumericValue();
-                    if(enableDebugInfo)
+                    double val1 = objects[get_left_num(j)].get_numeric_value();
+                    double val2 = objects[get_right_num(j)].get_numeric_value();
+                    if(enable_debug_info)
                     {
                         std::cout << "val1: " << val1 << std::endl;
                         std::cout << "val2: " << val2 << std::endl;
                     }
-                    switch(objects[j].getContent()[0])
+                    switch(objects[j].get_content()[0])
                     {
                         case '+':
-                            addObject(std::to_string(val1 + val2), "number", j + 2);
+                            add_object(std::to_string(val1 + val2), "number", j + 2);
                             break;
                         case '-':
-                            addObject(std::to_string(val1 - val2), "number", j + 2);
+                            add_object(std::to_string(val1 - val2), "number", j + 2);
                             break;
                         case '*':
-                            addObject(std::to_string(val1 * val2), "number", j + 2);
+                            add_object(std::to_string(val1 * val2), "number", j + 2);
                             break;
                         case '/':
-                            addObject(std::to_string(val1 / val2), "number", j + 2);
+                            add_object(std::to_string(val1 / val2), "number", j + 2);
                             break;
                         case '^':
-                            addObject(std::to_string(pow(val1, val2)), "number", j + 2);
+                            add_object(std::to_string(pow(val1, val2)), "number", j + 2);
                             break;
                     }
                     objects.erase(objects.begin() + j - 1, objects.begin() + j + 2);
                     j = 0;
-                    if(enableDebugInfo)
+                    if(enable_debug_info)
                     {
                         l++;
                         debug(l);
@@ -405,12 +405,12 @@ void compute(std::string command)
     }
     for(i = 0; i < objects.size(); i++)
     {
-        if(objects[i].getType() == "number") //Returns the first number in objects.
+        if(objects[i].get_type() == "number") //Returns the first number in objects.
         {
             break;
         }
     }
-    std::cout << " > " << objects[i].getContent() << std::endl;
+    std::cout << " > " << objects[i].get_content() << std::endl;
     objects.clear();
 }
 
@@ -420,13 +420,13 @@ void logout()
     session = false;
 }
 
-int searchNum(int begin, std::string str) //A function to search for the end of the value, and returns the index.
+int search_num(int begin, std::string str) //A function to search for the end of the value, and returns the index.
 {
     int i, j;
     bool decimalPlace = false;
     for(i = begin; i < str.size(); i++)
     {
-        if(str[i] >= numLowerBound && str[i] <= numUpperBound)
+        if(str[i] >= num_lower_bound && str[i] <= num_upper_bound)
         {
             goto CHECK;
         }
@@ -442,13 +442,13 @@ int searchNum(int begin, std::string str) //A function to search for the end of 
     return (int) str.size();
 }
 
-void addObject(std::string content, std::string type, int pos) //Adds an object to objects.
+void add_object(std::string content, std::string type, int pos) //Adds an object to objects.
 {
     Object newObject (content, type, pos);
     newObject.update();
     if(pos == -1)
     {
-        newObject.setLoc(objects.size());
+        newObject.set_loc(objects.size());
         objects.push_back(newObject);
     }
     else
@@ -463,24 +463,24 @@ void debug(int step) //Displays debug information.
     std::cout << "Step: " << step << std::endl;
     for(i = 0; i < objects.size(); i++)
     {
-        std::cout << "Content: " << objects[i].getContent() << std::endl;
-        std::cout << "Type: " << objects[i].getType() << std::endl;
-        std::cout << "Loc: " << objects[i].getLoc() << std::endl;
-        std::cout << "Bracket level: " << objects[i].getBracketLvl() << std::endl;
+        std::cout << "Content: " << objects[i].get_content() << std::endl;
+        std::cout << "Type: " << objects[i].get_type() << std::endl;
+        std::cout << "Loc: " << objects[i].get_loc() << std::endl;
+        std::cout << "Bracket level: " << objects[i].get_bracket_lvl() << std::endl;
         std::cout << "\n";
     }
 }
 
-void toggleDebug(std::string para)
+void toggle_debug(std::string para)
 {
     if(para == "true" || para == "TRUE" || para == "1")
     {
-        enableDebugInfo = true;
+        enable_debug_info = true;
         std::cout << "Debug information enabled" << std::endl;
     }
     else if(para == "false" || para == "FALSE" || para == "0")
     {
-        enableDebugInfo = false;
+        enable_debug_info = false;
         std::cout << "Debug information disabled" << std::endl;
     }
     else
@@ -490,7 +490,7 @@ void toggleDebug(std::string para)
 
 }
 
-void toggleCalclock()
+void toggle_calclock()
 {
     if(calclock)
     {
@@ -519,7 +519,7 @@ void define(std::string para, bool force)
     {
         for(Variable x : vars)
         {
-            if(x.getName() == para)
+            if(x.get_name() == para)
             {
                 std::cout << "def: a variable by the name \"" << para << "\" already exists. Use forcedef if you want to redefine it." << std::endl;
                 return;
@@ -528,7 +528,7 @@ void define(std::string para, bool force)
     }
     if(type == "polynomial")
     {
-        Polynomial P = inputPolynomial(name);
+        Polynomial P = input_polynomial(name);
         Variable newVar (name, type, P);
         vars.push_back(newVar);
     }
@@ -545,11 +545,11 @@ void recall(std::string var)
 {
     for(Variable x : vars)
     {
-        if(x.getName() == var)
+        if(x.get_name() == var)
         {
-            if(x.getType() == "polynomial")
+            if(x.get_type() == "polynomial")
             {
-                std::cout << " > " << x.getValue().toString() << std::endl;
+                std::cout << " > " << x.get_value().to_string() << std::endl;
                 return;
             }
         }
@@ -605,11 +605,11 @@ void help(std::string cmd)
     }
 }
 
-int getLeftNum(int begin)
+int get_left_num(int begin)
 {
     for(; begin >= 0; begin--)
     {
-        if(objects[begin].getType() == "number")
+        if(objects[begin].get_type() == "number")
         {
             return begin;
         }
@@ -617,11 +617,11 @@ int getLeftNum(int begin)
     return -1;
 }
 
-int getRightNum(int begin)
+int get_right_num(int begin)
 {
     for(; begin < objects.size(); begin++)
     {
-        if(objects[begin].getType() == "number")
+        if(objects[begin].get_type() == "number")
         {
             return begin;
         }
