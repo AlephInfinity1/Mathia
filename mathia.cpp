@@ -1,5 +1,5 @@
 #include <iostream>
-#include "mathia.h"
+#include "mathia.hpp"
 
 std::string input;
 char c;
@@ -12,7 +12,7 @@ int main()
     while(session)
     {
         std::cout << "Mathia ";
-        if(enableDebugInfo)
+        if(enable_debug_info)
         {
             std::cout << "(Debug) ";
         }
@@ -22,7 +22,7 @@ int main()
         }
         std::cout << "> ";
         std::getline(std::cin, input);
-        loadCommand(input);
+        load_command(input);
     }
     return 0;
 }
