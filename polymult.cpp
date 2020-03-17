@@ -1,11 +1,11 @@
 #include <iostream>
-#include "mathutil.hpp"
+#include "mathutil.h"
 
 int main()
 {
-    Polynomial P = input_polynomial("multiple");
-    Polynomial Q = input_polynomial("multiplier");
+    Polynomial P = inputPolynomial("multiple");
+    Polynomial Q = inputPolynomial("multiplier");
     Polynomial product = P * Q;
-    std::cout << "The product is " + product.to_string() << std::endl;
+    std::cout << "The product is " + product.toString() << std::endl;
     return 0;
 }

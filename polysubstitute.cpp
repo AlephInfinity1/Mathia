@@ -1,9 +1,9 @@
 #include <iostream>
-#include "mathutil.hpp"
+#include "mathutil.h"
 
 int main()
 {
-    Polynomial P = input_polynomial("");
+    Polynomial P = inputPolynomial();
     double n;
     std::cout << "Enter the number to substitute into the polynomial: " << std::endl;
     std::cin >> n;
