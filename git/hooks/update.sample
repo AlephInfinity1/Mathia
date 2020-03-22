@@ -62,12 +62,12 @@ esac
 # if $newrev is 0000...0000, it's a commit to delete a ref.
 zero="0000000000000000000000000000000000000000"
 if [ "$newrev" = "$zero" ]; then
-	newrev_type=delete
+	newrevType=delete
 else
-	newrev_type=$(git cat-file -t $newrev)
+	newrevType=$(git cat-file -t $newrev)
 fi
 
-case "$refname","$newrev_type" in
+case "$refname","$newrevType" in
 	refs/tags/*,commit)
 		# un-annotated tag
 		short_refname=${refname##refs/tags/}
@@ -119,7 +119,7 @@ case "$refname","$newrev_type" in
 		;;
 	*)
 		# Anything else (is there anything else?)
-		echo "*** Update hook: unknown type of update to ref $refname of type $newrev_type" >&2
+		echo "*** Update hook: unknown type of update to ref $refname of type $newrevType" >&2
 		exit 1
 		;;
 esac

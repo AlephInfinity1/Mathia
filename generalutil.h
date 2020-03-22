@@ -15,7 +15,7 @@ double* doubleVectorToArray(std::vector<double> vector)
 
 namespace my
 {
-    std::string to_string(double d)
+    std::string toString(double d)
     {
         std::ostringstream stm;
         stm << std::setprecision(std::numeric_limits<double>::digits10) << d ;
