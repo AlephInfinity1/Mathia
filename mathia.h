@@ -549,7 +549,7 @@ void recall(std::string var)
         {
             if(x.getType() == "polynomial")
             {
-                std::cout << " > " << x.getValue().toString() << std::endl;
+                std::cout << " > " << x.getValue().to_string() << std::endl;
                 return;
             }
         }

@@ -99,7 +99,7 @@ Term termMultiply(Term x, Term y) //Serves as a utility function for polyMultipl
  * int countTerms(): count the number of terms a Polynomial has.
  * Term getTerm(int index): returns terms[index].
  * void addTerm(Term t): adds t to terms.
- * std::string toString(): converts the Polynomial to a string.
+ * std::string to_string(): converts the Polynomial to a string.
  * double substitute(double value): substitutes value into x, the returns the value of the resulting polynomial.
  * Polynomial operator+(Polynomial Q): overloads the + operator. Same as polyAdd.
  * Polynomial operator-(Polynomial Q): overloads the - operator. Same as polySubtract.
@@ -259,14 +259,14 @@ class Polynomial
         {
             terms.push_back(t);
         }
-        std::string toString()
+        std::string to_string()
         {
             init();
             std::string str = "";
             int i;
             for(i = getPower(); i >= 0; i--)
             {
-                str.append(my::toString(getCoefficientOfPower(i)));
+                str.append(my::to_string(getCoefficientOfPower(i)));
                 if(i >= 2)
                 {
                     str.append(" x^");

@@ -6,7 +6,7 @@ A command-line–like tool for mathematical operations.
 
 - [ ] Create a better algorithm of aggregating like terms for polynomials. (Remember to delete terms whose coefficient is 0!)
 - [x] ~~Construction of a Polynomial using numbers doesn't work yet.~~ (Partially implemented with polyParseArray)
-- [ ] Change toString() such that it does not display 1 coefficients, and displays negative numbers properly (i.e. 3 x^2 - 5 x instead of 3 x^2 + -5 x).
+- [ ] Change to_string() such that it does not display 1 coefficients, and displays negative numbers properly (i.e. 3 x^2 - 5 x instead of 3 x^2 + -5 x).
 - [ ] Create a function to parse string into Polynomial.
 - [ ] Modify polyDivide so that it displays the procedure line-by-line.
 - [x] ~~Fix the issue with arithmetic operations (9+2-9 returning - as the result.)~~
