@@ -16,6 +16,8 @@ const int maxIterations = 1000; //The maximum iterations executed for some funct
 
 const int maxPower = 100; //Specifies the maximum power allowed. Used by aggregate().
 
+const double PI = 3.1415926535897932384626433832795028841971693993751058209749445923078164062862089;
+
 class Term;
 class Polynomial;
 
@@ -95,6 +97,7 @@ Term termMultiply(Term x, Term y) //Serves as a utility function for polyMultipl
  * void init(): a helper function that runs sortTerms and aggregate.
  * int searchForPower(int l, int r, int target): uses binary search algorithm (https://www.geeksforgeeks.org/binary-search/) to search for the index of a specific power. Useful for other functions.
  * double getCoefficientOfPower(int power): gets the coefficient of a certain power of x (using searchForPower). Returns 0 if not found (the coefficient is mathematically 0. NOT -1).
+ * double operator[](int power): same as getCoeffecientOfPower, except the operator [] is overloaded.
  * int getPower(): gets the maximum power of the Polynomial and returns it as an integer.
  * int countTerms(): count the number of terms a Polynomial has.
  * Term getTerm(int index): returns terms[index].
@@ -229,6 +232,19 @@ class Polynomial
             return -1;
         }
         double getCoefficientOfPower(int power)
+        {
+            init();
+            int p = searchForPower(0, terms.size() - 1, power);
+            if(p == -1)
+            {
+                return 0;
+            }
+            else
+            {
+                return terms[p].getCoefficient();
+            }
+        }
+        double operator[](int power)
         {
             init();
             int p = searchForPower(0, terms.size() - 1, power);
@@ -562,8 +578,153 @@ class Quadratic : Polynomial
         }
 };
 
-class MathVector
+class CVector;
+class PVector;
+
+/* class CVector: a cartesian vector
+ *
+ * Variables:
+ * - private x: The x value of the vector
+ * - private y: The y value of the vector
+ *
+ * Functions:
+ * - public CVector(double x, double y): general constructor
+ * - public double getX(): gets the value of x.
+ * - public double getY(): gets the value of y.
+ * - public CVector setX(double x): sets the value of x and returns an instance of itself.
+ * - public CVector setY(double y): sets the value of y and returns an instance of itself.
+ * - public CVector(PVector vec): constructs a cartesian vector from a polar vector
+ *
+ * Mathematical functions:
+ * - public PVector polar(): returns the polar form of this vector.
+ * - public CVector operator-(): returns the negated vector.
+ * - public CVector operator+(CVector val): returns the sum of *this and val.
+ * - public CVector operator-(CVector val): returns the difference of *this and val.
+ * - public CVector operator*(T val): returns the scalar multiple of this vector.
+ */
+
+class CVector
 {
     private:
         double x;
+        double y;
+
+    public:
+        CVector(double x, double y)
+        {
+            this -> x = x;
+            this -> y = y;
+        }
+        CVector(PVector);
+        double getX()
+        {
+            return x;
+        }
+        double getY()
+        {
+            return y;
+        }
+        CVector setX(double x)
+        {
+            this -> x = x;
+            return *this;
+        }
+        CVector setY(double y)
+        {
+            this -> y = y;
+            return *this;
+        }
+
+        PVector polar()
+        {
+            double rad = sqrt(pow(x, 2) + pow(y, 2));
+            double angle = atan2(y, x);
+            return PVector(rad, angle);
+        }
+
+        CVector operator-()
+        {
+            return CVector(-x, -y);
+        }
+
+        CVector operator+(CVector val)
+        {
+            return CVector(this -> getX() + val.getX(), this -> getY() + val.getY());
+        }
+
+        CVector operator-(CVector val)
+        {
+            return *this + -val;
+        }
+
+        template <typename T>
+        CVector operator*(T val)
+        {
+            return CVector(this -> getX() * val, this -> getY() * val);
+        }
 };
+
+/*
+ * Class PVector:
+ *
+ * Variables:
+ * - private rad: The radius of the vector
+ * - private angle: The angle, in radian, of the vector
+ *
+ * Functions:
+ * - public PVector(double rad, double angle): general constructor
+ * - Getter and setter functions, similar to CVector
+ * - public PVector(CVector vec): constructs the vector from a cartesian vector.
+ *
+ * Mathematical functions:
+ * - public CVector cartesian(): returns the cartesian form of this vector.
+ */
+
+class PVector
+{
+    private:
+        double rad;
+        double angle;
+
+    public:
+        PVector(double rad, double angle)
+        {
+            this -> rad = rad;
+            this -> angle = angle;
+        }
+        PVector(CVector);
+        double getRad()
+        {
+            return rad;
+        }
+        double getAngle()
+        {
+            return angle;
+        }
+        PVector setRad(double rad)
+        {
+            this -> rad = rad;
+            return *this;
+        }
+        PVector setAngle(double angle)
+        {
+            this -> angle = angle;
+            return *this;
+        }
+        CVector cartesian()
+        {
+            double x = rad * cos(angle);
+            double y = rad * sin(angle);
+            return CVector(x, y);
+        }
+};
+
+CVector::CVector(PVector vec)
+{
+    *this = vec.cartesian();
+}
+
+PVector::PVector(CVector vec)
+{
+    *this = vec.polar();
+}

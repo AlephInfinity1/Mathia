@@ -13,6 +13,17 @@ double* doubleVectorToArray(std::vector<double> vector)
     return array;
 }
 
+template <typename T>
+T* vectorToArray(std::vector<T> vector)
+{
+    T* array = new T[vector.size()];
+    for(int i = 0; i < vector.size(); i++)
+    {
+        array[i] = vector[i];
+    }
+    return array;
+}
+
 namespace my
 {
     std::string to_string(double d)
